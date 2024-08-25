@@ -1,4 +1,4 @@
-import { programInfo, initBuffers, setPositionAttribute, gl } from './boilerplate.js';
+import { programInfo, initBuffers, setAttributes, gl } from './boilerplate.js';
 import { Camera } from '../entities/camera.js';
 import { vec3 } from '../lib/gl-matrix.js';
 import { input } from '../input/control.js';
@@ -13,8 +13,11 @@ export function startRendering(inputVertices) {
 
 function drawScene() {
     
+    gl.useProgram(programInfo.program);
+
     let buffers = initBuffers(gl, vertices)
-    setPositionAttribute(gl, buffers, programInfo);
+    
+    setAttributes(gl, buffers, programInfo);
 
     camera.updateViewMatrix();
 
@@ -24,10 +27,6 @@ function drawScene() {
     gl.depthFunc(gl.LEQUAL);
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    setPositionAttribute(gl, buffers, programInfo);
-
-    gl.useProgram(programInfo.program);
 
     gl.uniformMatrix4fv(
         programInfo.uniformLocations.projectionMatrix,
@@ -40,7 +39,8 @@ function drawScene() {
         camera.viewMatrix,
     );
 
-    gl.drawArrays(gl.TRIANGLES, 0, vertices.length);
+    
+    gl.drawElements(gl.TRIANGLES, vertices.length, gl.UNSIGNED_INT, 0);
     
     input(camera);
 
