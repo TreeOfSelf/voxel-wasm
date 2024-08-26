@@ -7,8 +7,10 @@ const camera = new Camera(vec3.fromValues(0, 0, -12), vec3.fromValues(0, 0, 0), 
 var vertices = new Int32Array();
 
 export function startRendering(inputVertices) {
+
     vertices = inputVertices;
     drawScene();
+    
 }
 
 function drawScene() {
@@ -46,7 +48,7 @@ function drawScene() {
     );
 
     
-    gl.drawElements(gl.LINES, vertices.length, gl.UNSIGNED_INT, 0);
+    gl.drawElements(gl.TRIANGLES, vertices[0], gl.UNSIGNED_INT, 0);
     
     input(camera);
 

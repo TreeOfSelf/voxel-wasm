@@ -56,16 +56,16 @@ export function initBuffers(gl, vertices) {
     //Pre-allocate indice buffer 
 
     let indice = [];
-    for(let k=0;k<=99999;k++){
+    for(let k=0; k<=99999; k++){
         let q = k*4;
-        indice.push(q,q+1,q+2,q,q+2,q+3);
+        indice.push(q, q+1 ,q+2 ,q ,q+2 ,q+3);
     }
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indiceBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indice), gl.STATIC_DRAW);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices.slice(1,vertices[0] + 1), gl.STATIC_DRAW);
 
     return {
         indice : indiceBuffer,
