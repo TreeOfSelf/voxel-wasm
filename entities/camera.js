@@ -29,11 +29,16 @@ export class Camera extends Entity {
         mat4.translate(translationMatrix, translationMatrix, [position[0], position[1], position[2]]);
 
         const rotationMatrix = mat4.create();
-        mat4.rotateX(rotationMatrix, rotationMatrix, rotation[0]);
-        mat4.rotateY(rotationMatrix, rotationMatrix, rotation[1]);
+        mat4.rotateX(rotationMatrix, rotationMatrix, rotation[1]);
+        mat4.rotateY(rotationMatrix, rotationMatrix, rotation[0]);
         mat4.rotateZ(rotationMatrix, rotationMatrix, rotation[2]);
 
         mat4.multiply(this.viewMatrix, rotationMatrix, translationMatrix);
+    }
+
+    setAspect(aspect) {
+        this.aspect = aspect;
+        this.updateProjectionMatrix();
     }
 
 }

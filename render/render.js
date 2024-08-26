@@ -15,10 +15,16 @@ function drawScene() {
     
     gl.useProgram(programInfo.program);
 
+    gl.canvas.width = window.innerWidth;
+    gl.canvas.height = window.innerHeight;
+    
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
     let buffers = initBuffers(gl, vertices)
     
     setAttributes(gl, buffers, programInfo);
 
+    camera.setAspect(gl.canvas.clientWidth / gl.canvas.clientHeight);
     camera.updateViewMatrix();
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -40,7 +46,7 @@ function drawScene() {
     );
 
     
-    gl.drawElements(gl.TRIANGLES, vertices.length, gl.UNSIGNED_INT, 0);
+    gl.drawElements(gl.LINES, vertices.length, gl.UNSIGNED_INT, 0);
     
     input(camera);
 
