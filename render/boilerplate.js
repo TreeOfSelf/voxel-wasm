@@ -3,9 +3,9 @@ import { loadUrl } from '../lib/lib.js';
 export const canvas = document.querySelector("#gl");
 export const gl = canvas.getContext("webgl2");
 
-async function initShaderProgram(gl) {
-    const vertexShader = loadShader(gl, gl.VERTEX_SHADER, await loadUrl('./render/shaders/vertex.glsl'));
-    const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, await loadUrl('./render/shaders/fragment.glsl'));
+export async function initShaderProgram(gl, vertexShaderUrl, fragmentShaderUrl) {
+    const vertexShader = loadShader(gl, gl.VERTEX_SHADER, await loadUrl(vertexShaderUrl));
+    const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, await loadUrl(fragmentShaderUrl));
 
     const shaderProgram = gl.createProgram();
     gl.attachShader(shaderProgram, vertexShader);
@@ -33,65 +33,4 @@ function loadShader(gl, type, source) {
     }
 
     return shader;
-}
-
-const shaderProgram = await initShaderProgram(gl);
-
-export const programInfo = {
-    program: shaderProgram,
-    attribLocations: {
-        vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
-    },
-    uniformLocations: {
-        projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
-        viewMatrix: gl.getUniformLocation(shaderProgram, "uViewMatrix"),
-    },
-};
-
-export function initBuffers(gl, vertices) {
-
-    const indiceBuffer = gl.createBuffer();
-    const positionBuffer = gl.createBuffer();
-
-    //Pre-allocate indice buffer 
-
-    let indice = [];
-    for(let k=0; k<=99999; k++){
-        let q = k*4;
-        indice.push(q, q+1 ,q+2 ,q ,q+2 ,q+3);
-    }
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indiceBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indice), gl.STATIC_DRAW);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, vertices.slice(1,vertices[0] + 1), gl.STATIC_DRAW);
-
-    return {
-        indice : indiceBuffer,
-        position: positionBuffer,
-    };
-}
-
-function setPositionAttribute(gl, buffers, programInfo) {
-    const numComponents = 3;
-    const type = gl.INT;
-    const normalize = false;
-    const stride = 0;
-    const offset = 0;
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-    gl.vertexAttribPointer(
-        programInfo.attribLocations.vertexPosition,
-        numComponents,
-        type,
-        normalize,
-        stride,
-        offset,
-    );
-    gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
-}
-
-
-export function setAttributes(gl, buffers, programInfo) {
-    setPositionAttribute(gl, buffers, programInfo);
 }

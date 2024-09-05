@@ -1,4 +1,5 @@
-import { programInfo, initBuffers, setAttributes, gl } from './boilerplate.js';
+import { gl } from './boilerplate.js';
+import { programInfo, initBuffers, setAttributes } from './greedy_program.js';
 import { Camera } from '../entities/camera.js';
 import { vec3 } from '../lib/gl-matrix.js';
 import { input } from '../input/control.js';
@@ -9,11 +10,11 @@ var vertices = new Int32Array();
 export function startRendering(inputVertices) {
 
     vertices = inputVertices;
-    drawScene();
+    drawGame();
     
 }
 
-function drawScene() {
+function drawGame() {
     
     gl.useProgram(programInfo.program);
 
@@ -52,5 +53,5 @@ function drawScene() {
     
     input(camera);
 
-    requestAnimationFrame(drawScene);
+    requestAnimationFrame(drawGame);
 }
