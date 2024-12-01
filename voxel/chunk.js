@@ -3,6 +3,7 @@ export const VIEW_DISTANCE = 8;
 export class Chunk {
     constructor() {
         this.vertices = new SharedArrayBuffer(12000);
+        this.volume = new SharedArrayBuffer(12000);
     }
 }
 

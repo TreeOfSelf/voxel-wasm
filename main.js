@@ -1,4 +1,4 @@
-import init, { initialize_world, mesh, consume_chunk_buffers } from "./pkg/rust_greedy_voxel.js";
+import init, { initialize_world, mesh, starter_block, consume_chunk_buffers } from "./pkg/rust_greedy_voxel.js";
 import { World } from "./voxel/world.js";
 import { startRendering} from "./render/render.js";
 
@@ -12,8 +12,9 @@ init().then(() => {
         consume_chunk_buffers(chunkID, world.chunks[chunkID].vertices);
     }
 
-    mesh();
+    starter_block();
 
     startRendering(new Int32Array(world.chunks[0].vertices));
 
+    console.log(world);
 });

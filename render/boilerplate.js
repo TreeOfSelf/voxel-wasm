@@ -20,6 +20,22 @@ export async function initShaderProgram(gl, vertexShaderUrl, fragmentShaderUrl) 
     return shaderProgram;
 }
 
+export function setScreenSize() {
+    gl.canvas.width = window.innerWidth;
+    gl.canvas.height = window.innerHeight;
+    
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+}
+
+export function clearScreen() {
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearDepth(1.0);
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+}
+
 function loadShader(gl, type, source) {
     const shader = gl.createShader(type);
 

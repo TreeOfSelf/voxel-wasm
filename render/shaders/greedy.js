@@ -1,10 +1,10 @@
-import { gl, initShaderProgram } from "./boilerplate.js";
+import { gl, initShaderProgram } from "../boilerplate.js";
 
 const shaderProgram = await initShaderProgram(gl, 
     './render/shaders/greedy/vertex.glsl', 
     './render/shaders/greedy/fragment.glsl');
 
-export const programInfo = {
+ const programInfo = {
     program: shaderProgram,
     attribLocations: {
         vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
@@ -15,7 +15,7 @@ export const programInfo = {
     },
 };
 
-export function initBuffers(gl, vertices) {
+function initBuffers(gl, vertices) {
 
     const indiceBuffer = gl.createBuffer();
     const positionBuffer = gl.createBuffer();
@@ -59,6 +59,27 @@ function setPositionAttribute(gl, buffers, programInfo) {
 }
 
 
-export function setAttributes(gl, buffers, programInfo) {
+function setAttributes(gl, buffers) {
     setPositionAttribute(gl, buffers, programInfo);
+}
+
+export function draw(vertices, camera) {
+    gl.useProgram(programInfo.program);
+
+    let buffers = initBuffers(gl, vertices)
+    
+    setAttributes(gl, buffers, programInfo);
+
+    gl.uniformMatrix4fv(
+        programInfo.uniformLocations.projectionMatrix,
+        false,
+        camera.projectionMatrix,
+    );
+    gl.uniformMatrix4fv(
+        programInfo.uniformLocations.viewMatrix,
+        false,
+        camera.viewMatrix,
+    );
+
+    gl.drawElements(gl.TRIANGLES, vertices[0], gl.UNSIGNED_INT, 0);
 }
