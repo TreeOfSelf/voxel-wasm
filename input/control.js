@@ -27,6 +27,10 @@ export function input(entity) {
         Math.sin(entity.rotation[0])
     );
 
+    const up = vec3.create(); 
+    vec3.cross(up, right, forward); 
+    vec3.normalize(up, up);
+
     const speed = 0.1;
 
     if (keyboard.isKeyPressed("w")) 
@@ -40,5 +44,11 @@ export function input(entity) {
     
     if (keyboard.isKeyPressed("d")) 
         vec3.scaleAndAdd(entity.position, entity.position, right, -speed);
+
+    if (keyboard.isKeyPressed("o")) 
+        vec3.scaleAndAdd(entity.position, entity.position, up, -speed);
+
+    if (keyboard.isKeyPressed("p")) 
+        vec3.scaleAndAdd(entity.position, entity.position, up, speed);
     
 }

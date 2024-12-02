@@ -9,12 +9,9 @@ init().then(() => {
     initialize_world();
 
     for (let chunkID in world.chunks) {
-        consume_chunk_buffers(chunkID, world.chunks[chunkID].vertices);
+        consume_chunk_buffers(chunkID, world.chunks[chunkID].vertices, world.chunks[chunkID].volume);
     }
-
+    
     starter_block();
-
     startRendering(new Int32Array(world.chunks[0].vertices));
-
-    console.log(world);
 });
