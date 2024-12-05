@@ -9,9 +9,16 @@ init().then(() => {
     initialize_world();
 
     for (let chunkID in world.chunks) {
-        consume_chunk_buffers(chunkID, world.chunks[chunkID].vertices, world.chunks[chunkID].volume);
+        consume_chunk_buffers(chunkID, 
+            world.chunks[chunkID].vertices, 
+            world.chunks[chunkID].volume,
+            world.chunks[chunkID].blockType,
+            world.chunks[chunkID].textureCoordinates         
+        );
     }
     
     starter_block();
-    startRendering(new Int32Array(world.chunks[0].vertices));
+    
+    startRendering(new Uint8Array(world.chunks[0].vertices), new Float32Array(new Uint8Array(world.chunks[0].blockType)), new Uint8Array(world.chunks[0].textureCoordinates));
+    console.log(new Uint8Array(world.chunks[0].blockType));
 });

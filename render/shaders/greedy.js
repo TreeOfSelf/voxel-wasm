@@ -7,18 +7,25 @@ const shaderProgram = await initShaderProgram(gl,
  const programInfo = {
     program: shaderProgram,
     attribLocations: {
-        vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
+        position: gl.getAttribLocation(shaderProgram, "aPosition"),
+        blockType: gl.getAttribLocation(shaderProgram, "aBlockType"),
+        textureCoordinates: gl.getAttribLocation(shaderProgram, "aTextureCoordinates"),
     },
     uniformLocations: {
         projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
         viewMatrix: gl.getUniformLocation(shaderProgram, "uViewMatrix"),
+        sampler: gl.getUniformLocation(shaderProgram, "uSampler"),
+
     },
 };
 
-function initBuffers(gl, vertices) {
-
+function initBuffers(gl, vertices, blockType, textureCoordinates) {
+    
     const indiceBuffer = gl.createBuffer();
     const positionBuffer = gl.createBuffer();
+    const blockTypeBuffer = gl.createBuffer();
+    const textureCoordinatesBuffer = gl.createBuffer();
+
 
     //Pre-allocate indice buffer 
 
@@ -34,28 +41,40 @@ function initBuffers(gl, vertices) {
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, vertices.slice(1,vertices[0] + 1), gl.STATIC_DRAW);
 
+    gl.bindBuffer(gl.ARRAY_BUFFER, blockTypeBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, blockType.slice(1,blockType[0] + 1), gl.STATIC_DRAW);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordinatesBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, textureCoordinates.slice(1,textureCoordinates[0] + 1), gl.STATIC_DRAW);
+    
     return {
         indice : indiceBuffer,
-        position: positionBuffer,
+        position : positionBuffer,
+        blockType : blockTypeBuffer,
+        textureCoordinates : textureCoordinatesBuffer,
     };
 }
 
 function setPositionAttribute(gl, buffers, programInfo) {
-    const numComponents = 3;
-    const type = gl.INT;
-    const normalize = false;
-    const stride = 0;
-    const offset = 0;
+
     gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
     gl.vertexAttribPointer(
-        programInfo.attribLocations.vertexPosition,
-        numComponents,
-        type,
-        normalize,
-        stride,
-        offset,
+        programInfo.attribLocations.position,
+        3, // Components
+        gl.UNSIGNED_BYTE, // Type 
+        false, //Normalize
+        0,
+        0,
     );
-    gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+    gl.enableVertexAttribArray(programInfo.attribLocations.position);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.blockType);
+    gl.vertexAttribPointer(programInfo.attribLocations.blockType, 1, gl.FLOAT, false, 0,0);
+    gl.enableVertexAttribArray(programInfo.attribLocations.blockType);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.textureCoordinates);
+    gl.vertexAttribPointer(programInfo.attribLocations.textureCoordinates, 2, gl.UNSIGNED_BYTE, false, 0,0);
+    gl.enableVertexAttribArray(programInfo.attribLocations.textureCoordinates);
 }
 
 
@@ -63,10 +82,10 @@ function setAttributes(gl, buffers) {
     setPositionAttribute(gl, buffers, programInfo);
 }
 
-export function draw(vertices, camera) {
+export function draw(vertices, blockType, textureCoordinates, camera) {
     gl.useProgram(programInfo.program);
 
-    let buffers = initBuffers(gl, vertices)
+    let buffers = initBuffers(gl, vertices, blockType, textureCoordinates)
     
     setAttributes(gl, buffers, programInfo);
 
@@ -81,5 +100,6 @@ export function draw(vertices, camera) {
         camera.viewMatrix,
     );
 
+    gl.uniform1i(programInfo.uniformLocations.sampler,0);	
     gl.drawElements(gl.TRIANGLES, vertices[0], gl.UNSIGNED_INT, 0);
 }

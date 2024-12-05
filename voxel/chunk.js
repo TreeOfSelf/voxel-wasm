@@ -4,6 +4,8 @@ export class Chunk {
     constructor() {
         this.vertices = new SharedArrayBuffer(12000);
         this.volume = new SharedArrayBuffer(12000);
+        this.blockType = new SharedArrayBuffer(12000);
+        this.textureCoordinates = new SharedArrayBuffer(12000);
     }
 }
 

@@ -1,6 +1,15 @@
+#version 300 es
+ 
 precision lowp float;
 
-varying vec3 vPosition;
+in vec3 vPosition;
+flat in float vBlockType;
+in vec2 vTextureCoordinates;
+
+uniform lowp sampler2DArray uSampler;
+
+out vec4 fragColor;
+
 void main() {
-    gl_FragColor = vec4(vPosition.x * 0.2, vPosition.y * 0.2, vPosition.z * 0.2 , 1.0);
+    fragColor = texture(uSampler,vec3(vTextureCoordinates[0],vTextureCoordinates[1],vBlockType));
 }

@@ -7,7 +7,7 @@ const shaderProgram = await initShaderProgram(gl,
 const programInfo = {
     program: shaderProgram,
     attribLocations: {
-        vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
+        position: gl.getAttribLocation(shaderProgram, "aPosition"),
     },
     uniformLocations: {
         screenSize: gl.getUniformLocation(shaderProgram, "uScreenSize"),
@@ -41,14 +41,14 @@ function setPositionAttribute(gl, buffers, programInfo) {
     const offset = 0;
     gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
     gl.vertexAttribPointer(
-        programInfo.attribLocations.vertexPosition,
+        programInfo.attribLocations.position,
         numComponents,
         type,
         normalize,
         stride,
         offset,
     );
-    gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+    gl.enableVertexAttribArray(programInfo.attribLocations.position);
 }
 
 
